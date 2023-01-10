@@ -1,14 +1,16 @@
 package com.mtrilogic.abstracts;
 
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 
-import com.mtrilogic.classes.Datable;
-import com.mtrilogic.interfaces.Restorable;
-
 @SuppressWarnings("unused")
-public abstract class Model implements Restorable {
+public abstract class Model {
 
-    private static final String ITEM_ID = "itemId", VIEW_TYPE = "viewType", ENABLED = "enabled";
+    private static final String
+            ITEM_ID = "itemId",
+            VIEW_TYPE = "viewType",
+            ENABLED = "enabled";
 
     private long itemId;
     private int viewType;
@@ -22,8 +24,10 @@ public abstract class Model implements Restorable {
         this.enabled = enabled;
     }
 
-    public Model(@NonNull Datable datable){
-        restoreFromData(datable);
+    public Model(Bundle data){
+        if (data != null){
+            restoreFromData(data);
+        }
     }
 
     public long getItemId() {
@@ -50,17 +54,15 @@ public abstract class Model implements Restorable {
         this.enabled = enabled;
     }
 
-    @Override
-    public void restoreFromData(@NonNull Datable datable) {
-        itemId = datable.getLong(ITEM_ID);
-        viewType = datable.getInt(VIEW_TYPE);
-        enabled = datable.getBoolean(ENABLED);
+    protected void restoreFromData(@NonNull Bundle data) {
+        itemId = data.getLong(ITEM_ID);
+        viewType = data.getInt(VIEW_TYPE);
+        enabled = data.getBoolean(ENABLED);
     }
 
-    @Override
-    public void saveToData(@NonNull Datable datable) {
-        datable.putLong(ITEM_ID, itemId);
-        datable.putInt(VIEW_TYPE, viewType);
-        datable.putBoolean(ENABLED, enabled);
+    public void saveToData(@NonNull Bundle data) {
+        data.putLong(ITEM_ID, itemId);
+        data.putInt(VIEW_TYPE, viewType);
+        data.putBoolean(ENABLED, enabled);
     }
 }
