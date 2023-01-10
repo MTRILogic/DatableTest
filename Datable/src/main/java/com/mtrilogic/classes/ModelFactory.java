@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.mtrilogic.abstracts.Model;
-import com.mtrilogic.interfaces.DataIterationListener;
+import com.mtrilogic.interfaces.ModelFromDataListener;
 
 import java.util.ArrayList;
 
@@ -21,7 +21,11 @@ public class ModelFactory {
         }
     }
 
-    public Model[] getModels(@NonNull DataIterationListener listener){
+    public Model getModel(@NonNull ModelFromDataListener listener){
+        return listener.getModelFromData(data);
+    }
+
+    public Model[] getModels(@NonNull ModelFromDataListener listener){
         Model[] models = new Model[size];
         for (int i = 0; i < size; i++){
             models[i] = getModelFromIteration(i, listener);
@@ -29,7 +33,7 @@ public class ModelFactory {
         return models;
     }
 
-    public ArrayList<Model> getModelList(@NonNull DataIterationListener listener){
+    public ArrayList<Model> getModelList(@NonNull ModelFromDataListener listener){
         ArrayList<Model> modelList = new ArrayList<>(size);
         for (int i = 0; i < size; i++){
             modelList.add(i, getModelFromIteration(i, listener));
@@ -37,8 +41,8 @@ public class ModelFactory {
         return modelList;
     }
 
-    private Model getModelFromIteration(int i, DataIterationListener listener){
+    private Model getModelFromIteration(int i, @NonNull ModelFromDataListener listener){
         Datable datable = data.getParcelable(Datable.MODEL + i);
-        return listener.onDataIteration(datable != null ? datable.getData() : null);
+        return listener.getModelFromData(datable != null ? datable.getData() : null);
     }
 }

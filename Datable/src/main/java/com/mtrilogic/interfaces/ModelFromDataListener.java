@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 
 import com.mtrilogic.abstracts.Model;
 
-public interface DataIterationListener {
+public interface ModelFromDataListener {
 
     @NonNull
-    Model onDataIteration(Bundle data);
+    Model getModelFromData(Bundle data);
 }
