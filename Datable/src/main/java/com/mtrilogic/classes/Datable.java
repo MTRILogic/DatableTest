@@ -11,7 +11,7 @@ import com.mtrilogic.abstracts.Model;
 import java.util.ArrayList;
 
 @SuppressWarnings("unused")
-public class Datable implements Parcelable {
+public final class Datable implements Parcelable {
     public static final Creator<Datable> CREATOR = new ClassLoaderCreator<Datable>() {
         @Override
         public Datable createFromParcel(Parcel source, ClassLoader loader) {
@@ -36,38 +36,34 @@ public class Datable implements Parcelable {
         }
     };
 
-    public static final String MODEL = "model";
+    public static final String DATA = "data", SIZE = "size";
 
     private final Bundle data;
 
-    public Datable(){
-        data = new Bundle();
+    public Datable(Model model){
+        this(new Bundle());
+        saveModel(DATA, model);
     }
 
-    public Datable(@NonNull Model model){
+    public Datable(Model[] models){
         this(new Bundle());
-        model.saveToData(data);
-    }
-
-    public Datable(@NonNull Model[] models){
-        this(new Bundle());
-        int size = models.length;
-        data.putInt(MODEL, size);
-        for (int i = 0; i < size; i++){
-            Datable datable = new Datable();
-            models[i].saveToData(datable.data);
-            data.putParcelable(MODEL + i, datable);
+        if (models != null) {
+            int size = models.length;
+            data.putInt(SIZE, size);
+            for (int i = 0; i < size; i++) {
+                saveModel(DATA + i, models[i]);
+            }
         }
     }
 
-    public Datable(@NonNull ArrayList<Model> modelList){
+    public Datable(ArrayList<Model> modelList){
         this(new Bundle());
-        int size = modelList.size();
-        data.putInt(MODEL, size);
-        for (int i = 0; i < size; i++){
-            Datable datable = new Datable();
-            modelList.get(i).saveToData(datable.data);
-            data.putParcelable(MODEL + i, datable);
+        if (modelList != null) {
+            int size = modelList.size();
+            data.putInt(SIZE, size);
+            for (int i = 0; i < size; i++) {
+                saveModel(DATA + i, modelList.get(i));
+            }
         }
     }
 
@@ -80,12 +76,20 @@ public class Datable implements Parcelable {
     }
 
     @Override
-    public final int describeContents() {
+    public int describeContents() {
         return 0;
     }
 
     @Override
-    public final void writeToParcel(@NonNull Parcel dest, int flags) {
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeBundle(data);
+    }
+
+    private void saveModel(@NonNull String key, Model model){
+        if (model != null) {
+            Bundle data = new Bundle();
+            model.saveToData(data);
+            this.data.putBundle(key, data);
+        }
     }
 }

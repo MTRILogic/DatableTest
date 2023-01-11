@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.mtrilogic.abstracts.Model;
 import com.mtrilogic.classes.Datable;
-import com.mtrilogic.classes.ModelFactory;
+import com.mtrilogic.classes.Restorable;
 
 import java.util.ArrayList;
 
@@ -35,7 +35,7 @@ public class ListTextModel extends TextModel{
     @Override
     public void restoreFromData(@NonNull Bundle data) {
         super.restoreFromData(data);
-        modelList = new ModelFactory(data.getParcelable(LIST)).getModelList(TextModel::new);
+        modelList = new Restorable(data.getParcelable(LIST)).getModelList(TextModel::new);
     }
 
     @Override

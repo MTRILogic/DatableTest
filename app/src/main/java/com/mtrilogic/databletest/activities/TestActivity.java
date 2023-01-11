@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.mtrilogic.abstracts.Model;
-import com.mtrilogic.classes.ModelFactory;
+import com.mtrilogic.classes.Restorable;
 import com.mtrilogic.databletest.R;
 import com.mtrilogic.databletest.models.ListTextModel;
 import com.mtrilogic.databletest.models.TextModel;
@@ -28,9 +28,11 @@ public class TestActivity extends Activity {
 
         Intent intent = getIntent();
         if (intent != null){
-            Model[] models = new ModelFactory(intent.getParcelableExtra(DATABLE)).getModels(ListTextModel::new);
-            for (Model model : models){
-                listModels((ListTextModel) model);
+            Model[] models = new Restorable(intent.getParcelableExtra(DATABLE)).getModels(ListTextModel::new);
+            if (models != null) {
+                for (Model model : models){
+                    listModels((ListTextModel) model);
+                }
             }
         }
     }
